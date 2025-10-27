@@ -165,9 +165,9 @@ public class Apps_mgmt extends JFrame implements ActionListener {
                 rs = pst.executeQuery();
                 textArea.setText("");
                 while (rs.next()) {
-                    String data = "App_id: " + rs.getInt("app_id") +
+                    String data = "App id: " + rs.getInt("app_id") +
                             ", Name: " + rs.getString("app_name") +
-                            ", DOB: " + rs.getString("app_genre") + "\n";
+                            ", Genre: " + rs.getString("app_genre") + "\n";
                     textArea.append(data);
                 }
             }

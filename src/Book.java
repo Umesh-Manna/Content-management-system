@@ -6,7 +6,7 @@ import java.sql.*;
 import java.time.LocalDate;    //for date
 import java.time.format.DateTimeFormatter;		//for date
 
-public class Games_mgmt extends JFrame implements ActionListener {
+public class Book extends JFrame implements ActionListener {
 
     // GUI Components declaration
 	/*
@@ -16,8 +16,8 @@ public class Games_mgmt extends JFrame implements ActionListener {
     JTextArea textArea;
     */
 	
-	JLabel lblId, lblName, lblGenre, lblAmount;
-	JTextField txtId, txtName, txtGenre, txtAmount;
+	JLabel lblId, lblTitle, lblAuthor, lblCost;
+	JTextField txtId, txtTitle, txtAuthor, txtCost;
 	JButton btnAdd, btnUpdate, btnDelete, btnSearch, btnViewAll;
 	JTextArea textArea;
 	
@@ -27,8 +27,8 @@ public class Games_mgmt extends JFrame implements ActionListener {
     PreparedStatement pst;
     ResultSet rs;
 
-    public Games_mgmt() {
-        setTitle("Game");
+    public Book() {
+        setTitle("Books");
         setSize(500, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);  //Allows for absolute positioning of components
@@ -41,30 +41,31 @@ public class Games_mgmt extends JFrame implements ActionListener {
         txtId = new JTextField();
         txtId.setBounds(140, 30, 200, 30);
         add(txtId);
-
-        lblName = new JLabel("Name:");
-        lblName.setBounds(30, 70, 100, 30);
-        add(lblName);
-
-        txtName = new JTextField();
-        txtName.setBounds(140, 70, 200, 30);
-        add(txtName);
-
-        lblGenre = new JLabel("Genre:");
-        lblGenre.setBounds(30, 110, 100, 30);
-        add(lblGenre);
-
-        txtGenre = new JTextField();
-        txtGenre.setBounds(140, 110, 200, 30);
-        add(txtGenre);
         
-        lblAmount = new JLabel("Amount:");
-        lblAmount.setBounds(30, 150, 100, 30);
-        add(lblAmount);
+        lblTitle = new JLabel("Title:");
+        lblTitle.setBounds(30, 70, 100, 30);
+        add(lblTitle);
+        
+        txtTitle = new JTextField();
+        txtTitle.setBounds(140, 70, 200, 30);
+        add(txtTitle);
+        
+        lblAuthor = new JLabel("Author:");
+        lblAuthor.setBounds(30, 110, 100, 30);
+        add(lblAuthor);
 
-        txtAmount = new JTextField();
-        txtAmount.setBounds(140, 150, 200, 30);
-        add(txtAmount);
+        txtAuthor = new JTextField();
+        txtAuthor.setBounds(140, 110, 200, 30);
+        add(txtAuthor);
+        
+        lblCost = new JLabel("Cost:");
+        lblCost.setBounds(30, 150, 100, 30);
+        add(lblCost);
+
+        txtCost= new JTextField();
+        txtCost.setBounds(140, 150, 200, 30);
+        add(txtCost);
+        
 
         // Buttons
         btnAdd = new JButton("Add");
@@ -121,65 +122,64 @@ public class Games_mgmt extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         try {
             if (e.getSource() == btnAdd) {
-                String sql = "INSERT INTO Games (game_id, game_name, game_genre, game_amount) VALUES (?, ? , ?, ?)";
+                String sql = "INSERT INTO Books (book_id, book_title, book_author, book_cost) VALUES (?, ?, ?, ?)";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, Integer.parseInt(txtId.getText()));
-                pst.setString(2, txtName.getText());
-                pst.setString(3, txtGenre.getText());
-                pst.setInt(4, Integer.parseInt(txtAmount.getText()));
-
+                pst.setString(2, txtTitle.getText());
+                pst.setString(3, txtAuthor.getText());
+                pst.setInt(4, Integer.parseInt(txtCost.getText()));
+                
                 pst.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Game Added");
+                JOptionPane.showMessageDialog(this, "Book Added");
           
 
             } else if (e.getSource() == btnUpdate) {
-                String sql = "UPDATE Games SET game_name=?, game_genre=?, game_amount WHERE game_id=?";
+                String sql = "UPDATE Books SET book_title=?, book_author=?, book_cost=? WHERE book_id=?";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, txtName.getText());
-                pst.setString(2, txtGenre.getText());
-                pst.setInt(3, Integer.parseInt(txtAmount.getText()));
-                pst.setInt(3, Integer.parseInt(txtId.getText()));
+                pst.setString(1, txtTitle.getText());
+                pst.setString(2, txtAuthor.getText());
+                pst.setInt(3, Integer.parseInt(txtCost.getText()));
+                pst.setInt(4, Integer.parseInt(txtId.getText())); 
                 
                 int updated = pst.executeUpdate();
                 if (updated > 0)
-                    JOptionPane.showMessageDialog(this, "game data Updated");
+                    JOptionPane.showMessageDialog(this, "book data Updated");
                 else
-                    JOptionPane.showMessageDialog(this, "game not found");
+                    JOptionPane.showMessageDialog(this, "book not found");
 
             } else if (e.getSource() == btnDelete) {
-                String sql = "DELETE FROM Games WHERE game_id=?";
+                String sql = "DELETE FROM Books WHERE book_id=?";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, Integer.parseInt(txtId.getText()));
                 int deleted = pst.executeUpdate();
                 if (deleted > 0)
-                    JOptionPane.showMessageDialog(this, "Game Deleted");
+                    JOptionPane.showMessageDialog(this, "Book Deleted");
                 else
-                    JOptionPane.showMessageDialog(this, "Game not found");
+                    JOptionPane.showMessageDialog(this, "Book not found");
 
             } else if (e.getSource() == btnSearch) {
-                String sql = "SELECT * FROM Games WHERE game_id=?";
+                String sql = "SELECT * FROM Books WHERE book_id=?";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, Integer.parseInt(txtId.getText()));
                 rs = pst.executeQuery();
                 if (rs.next()) {
-                    txtName.setText(rs.getString("game_name"));
-                    txtGenre.setText(rs.getString("game_genre"));
-                    txtAmount.setText(String.valueOf(rs.getInt("game_amount")));
+                    txtTitle.setText(rs.getString("book_title"));
+                    txtAuthor.setText(rs.getString("book_author"));
+                    txtCost.setText(String.valueOf(rs.getInt("book_cost")));
 
                 } else {
-                    JOptionPane.showMessageDialog(this, "game not found");
+                    JOptionPane.showMessageDialog(this, "book not found");
                 }
 
             } else if (e.getSource() == btnViewAll) {
-                String sql = "SELECT * FROM Games";
+                String sql = "SELECT * FROM Books";
                 pst = conn.prepareStatement(sql);
                 rs = pst.executeQuery();
                 textArea.setText("");
                 while (rs.next()) {
-                    String data = "Game_id: " + rs.getInt("game_id") +
-                            ", Name: " + rs.getString("game_name") +
-                            ", Genre: " + rs.getString("game_genre") +
-                            ", Amount: " + rs.getInt("game_amount") +  "\n";
+                    String data = "Book_id: " + rs.getInt("book_id") +
+                            ", Name: " + rs.getString("book_title") +
+                            ", Author: " + rs.getString("book_author")  + ", Cost: " + rs.getInt("book_cost") + "\n";
                     textArea.append(data);
                 }
             }
@@ -197,13 +197,13 @@ public class Games_mgmt extends JFrame implements ActionListener {
 
     private void clearFields() {
         txtId.setText("");
-        txtName.setText("");
-        txtGenre.setText("");
-        txtAmount.setText("");
+        txtTitle.setText("");
+        txtAuthor.setText("");
+        txtCost.setText("");
     }
 
     public static void main(String[] args) {
-        new Games_mgmt().setVisible(true);
+        new Book().setVisible(true);
     }
 }
 

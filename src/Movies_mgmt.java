@@ -144,9 +144,9 @@ public class Movies_mgmt extends JFrame implements ActionListener {
                 pst.setInt(3, Integer.parseInt(txtId.getText()));
                 int updated = pst.executeUpdate();
                 if (updated > 0)
-                    JOptionPane.showMessageDialog(this, "user data Updated");
+                    JOptionPane.showMessageDialog(this, "movie data Updated");
                 else
-                    JOptionPane.showMessageDialog(this, "user not found");
+                    JOptionPane.showMessageDialog(this, "movie not found");
 
             } else if (e.getSource() == btnDelete) {
                 String sql = "DELETE FROM Movies WHERE movie_id=?";
@@ -154,9 +154,9 @@ public class Movies_mgmt extends JFrame implements ActionListener {
                 pst.setInt(1, Integer.parseInt(txtId.getText()));
                 int deleted = pst.executeUpdate();
                 if (deleted > 0)
-                    JOptionPane.showMessageDialog(this, "User Deleted");
+                    JOptionPane.showMessageDialog(this, "Movie Deleted");
                 else
-                    JOptionPane.showMessageDialog(this, "User not found");
+                    JOptionPane.showMessageDialog(this, "Movie not found");
 
             } else if (e.getSource() == btnSearch) {
                 String sql = "SELECT * FROM Movies WHERE movie_id=?";
@@ -177,8 +177,8 @@ public class Movies_mgmt extends JFrame implements ActionListener {
                 textArea.setText("");
                 while (rs.next()) {
                     String data = "Movie ID: " + rs.getInt("movie_id") +
-                            ", Name: " + rs.getString("movie_title") +
-                            ", DOB: " + rs.getDate("movie_release").toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "\n";
+                            ", Title: " + rs.getString("movie_title") +
+                            ", Release: " + rs.getDate("movie_release").toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "\n";
                     textArea.append(data);
                 }
             }
